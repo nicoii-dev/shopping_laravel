@@ -18,7 +18,7 @@ class AuthController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function register(Request $request) 
+    public function register(Request $request)
     {
         $validate = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -64,9 +64,7 @@ class AuthController extends Controller
 
         // Check password
         if(!$user || !Hash::check($fields['password'], $user->password)) {
-            return response([
-                'message' => 'Incorrect username or password.'
-            ], 401);
+            return response('Incorrect username or password.', 401);
         }
 
         $token = $user->createToken('BucketToursToken')->plainTextToken;
@@ -77,10 +75,10 @@ class AuthController extends Controller
                     'token' => $token,
                 ];
             } else {
-                return response(['message' => 'Account deactivated. Please contact administrator.'], 401);
+                return response('Account deactivated. Please contact administrator.', 401);
             }
         } else {
-            return response(['message' => 'Email is not verified.'], 401);
+            return response('Email is not verified.', 401);
         }
         return response($response);
     }
@@ -122,13 +120,9 @@ class AuthController extends Controller
             $user->is_verified = true;
             $user->email_verified_at = now();
             $user->save();
-            return response()->json([
-                'message' => "Email verified"
-            ], 200);
+            return response()->json("Email verified", 200);
         }else{
-            return response()->json([
-                'message' => "Email not found"
-            ], 404);
+            return response()->json("Email not found", 404);
         }
 
     }
@@ -150,9 +144,7 @@ class AuthController extends Controller
                 'token' => $token
             ], 200);
         }else{
-            return response()->json([
-                'message' => "Email not found"
-            ], 404);
+            return response()->json("Email not found", 404);
         }
 
     }
@@ -169,19 +161,15 @@ class AuthController extends Controller
         if($user){
             // Check password
             if(!Hash::check($fields['current_password'], $user->password)) {
-                return response([
-                    'message' => 'Incorrect current password.'
-                ], 401);
+                return response('Incorrect current password.', 401);
             }
 
             $user->password = Hash::make($fields['new_password']);
             $user->save();
 
-            return response()->json(["message" => "Password updated successfully"], 200); 
+            return response()->json("Password updated successfully", 200);
         } else {
-            return response()->json([
-                'message' => "Email not found"
-            ], 404);
+            return response()->json("Email not found", 404);
         }
     }
 
@@ -231,9 +219,7 @@ class AuthController extends Controller
         );
 
         if ($status == Password::PASSWORD_RESET) {
-            return response([
-                'message'=> 'Password reset successfully'
-            ]);
+            return response('Password reset successfully', 200);
         }
 
         return response([

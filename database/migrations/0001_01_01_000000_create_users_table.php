@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('phone_number');
             $table->date('dob')->nullable();
-            $table->string('role');
-            $table->boolean('status')->default(1);
+            $table->enum('role', ['user', 'admin', 'super_admin']);
+            $table->boolean('account_status')->default(1);
             $table->boolean('is_verified')->default(0);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
