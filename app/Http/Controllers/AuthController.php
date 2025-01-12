@@ -39,7 +39,7 @@ class AuthController extends Controller
                 'email' => $request['email'],
                 'password' => bcrypt($request['password']),
                 'role' => 'user',
-                'status' => 1,
+                'account_status' => 1,
                 'is_verified' => 0
             ]);
             $token = $user->createToken('BucketToursToken')->plainTextToken;
@@ -50,6 +50,62 @@ class AuthController extends Controller
                 "message" => "Account Created Successfully"
             ], 200);
         }
+    }
+
+    public function OauthRegistration(Request $request)
+    {
+        $validate = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+        ]);
+
+        if($validate) {
+            $user = User::where('email', $request['email'])->first();
+            if($user == null) {
+                try {
+                    $user = User::create([
+                        'first_name' => $request['first_name'],
+                        'last_name' => $request['last_name'],
+                        'email' => $request['email'],
+                        'password' => bcrypt($this->generateRandomString()),
+                        'role' => 'user',
+                        'account_status' => 1,
+                        'is_verified' => 1,
+                        'email_verified_at' => now()
+                    ]);
+                    $token = $user->createToken('BucketToursToken')->plainTextToken;
+                    DB::commit();
+                    $response = [
+                        'user' => $user,
+                        'accessToken' => $token,
+                    ];
+                    return response()->json($response,  200);
+                } catch (\Throwable $th) {
+                    throw $th;
+                }
+            } else {
+                $token = $user->createToken('BucketToursToken')->plainTextToken;
+                $response = [
+                    'user' => $user,
+                    'accessToken' => $token,
+                ];
+                return response()->json($response,  200);
+            }
+        }
+    }
+
+    private function generateRandomString() {
+        $length = 10;
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $randomString = $characters[random_int(0, $charactersLength - 1)];
+        }
+
+        return $randomString;
     }
 
     public function login(Request $request) {
@@ -69,10 +125,10 @@ class AuthController extends Controller
 
         $token = $user->createToken('BucketToursToken')->plainTextToken;
         if($user->is_verified == "1") {
-            if($user->status == "1") {
+            if($user->account_status == "1") {
                 $response = [
                     'user' => $user,
-                    'token' => $token,
+                    'accessToken' => $token,
                 ];
             } else {
                 return response('Account deactivated. Please contact administrator.', 401);

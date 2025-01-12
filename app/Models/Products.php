@@ -4,20 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Products;
 
-class Categories extends Model
+class Products extends Model
 {
+
     use HasFactory;
 
     protected $fillable = [
+        'categories_id',
         'name',
-        'image',
+        'price',
+        'quantity',
         'description',
+        'images',
     ];
-
-    public function categoryProducts()
-    {
-        return $this->hasMany(Products::class, 'categories_id', 'id');
-    }
 }

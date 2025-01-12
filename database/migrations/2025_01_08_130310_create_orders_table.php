@@ -19,9 +19,9 @@ return new class extends Migration
             $table->decimal('shipping_free', 8 ,2);
             $table->decimal('tax', 8 ,2);
             $table->decimal('total_amount', 8, 2);
-            $table->string('order_status');
+            $table->enum('order_status', ['paid', 'canceled', 'failed', 'expired']);
             $table->foreignId('billing_address')->unsigned()->nullable()->onDelete('cascade');
-            // $table->foreignId('user_addresses_id')->references('id')->on('user_addresses')->onDelete('cascade');
+            $table->foreignId('shipping_address')->unsigned()->nullable()->onDelete('cascade');
             $table->string('payment_type');
             $table->timestamps();
         });

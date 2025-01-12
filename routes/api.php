@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('login', 'AuthController@login');
+        Route::post('oauth-login', 'AuthController@OauthRegistration');
         Route::post('register', 'AuthController@register');
         Route::post('forgot-password', 'AuthController@forgotPassword')->middleware('guest')->name('password.email');
         Route::post('reset-password', 'AuthController@resetPassword')->middleware('guest')->name('password.reset');
@@ -20,7 +21,13 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             Route::post('verify-token', 'AuthController@verifyToken');
             Route::post('change-password', 'AuthController@changePassword');
         });
+
+        Route::post('create-payment-intent', 'StripeController@paymentIntent');
     });
+    Route::group(['prefix' => 'products'], function () {
+        Route::get('/', 'ProductsController@index');
+    });
+
 });
 
 

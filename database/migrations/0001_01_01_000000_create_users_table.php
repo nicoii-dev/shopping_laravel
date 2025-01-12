@@ -15,11 +15,11 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('phone_number');
+            $table->string('phone_number')->nullable();
             $table->date('dob')->nullable();
             $table->enum('role', ['user', 'admin', 'super_admin']);
             $table->boolean('account_status')->default(1);
-            $table->boolean('is_verified')->default(0);
+            $table->boolean('is_verified');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
