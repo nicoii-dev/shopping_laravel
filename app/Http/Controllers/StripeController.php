@@ -8,22 +8,23 @@ use Stripe\Stripe;
 class StripeController extends Controller
 {
 
-    public function OneTimePayment(Request $request)
+    public function checkoutSession(Request $request)
     {
         $request->validate([
-            'price' => 'required|max:255',
-            'quanity' => 'required|max:255',
+            // 'price' => 'required|max:255',
+            'quantity' => 'required|max:255',
         ]);
 
         Stripe::setApiKey(config('stripe.sk'));
 
         $checkout_session = \Stripe\Checkout\Session::create([
-            'success_url' => $domain_url . '/success.html?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => $domain_url . '/canceled.html',
+            'success_url' =>  'http://localhost:3000/success.html?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' =>  'http://localhost:3000/canceled.html',
             'mode' => 'payment',
             // 'automatic_tax' => ['enabled' => true],
             'line_items' => [[
-              'price' => $request['price'],
+                // example price
+              'price' => 'price_1Qgd07LZ9RxdQocLRjnnRgQj',
               'quantity' => $request['quantity'],
             ]]
           ]);

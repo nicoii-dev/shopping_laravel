@@ -23,6 +23,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         });
 
         Route::post('create-payment-intent', 'StripeController@paymentIntent');
+        Route::post('create-checkout-session', 'StripeController@checkoutSession');
     });
     Route::group(['prefix' => 'products'], function () {
         Route::get('/', 'ProductsController@index');
