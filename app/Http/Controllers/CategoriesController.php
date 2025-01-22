@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Categories;
+use Illuminate\Support\Facades\DB;
+
 
 class CategoriesController extends Controller
 {
@@ -11,7 +14,10 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        //
+        // $categories = Categories::all();
+        $categories = DB::table('categories')->get();
+        // echo $categories;
+        return view("categories", compact("categories", 'categories'));
     }
 
     /**
@@ -19,7 +25,10 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $categories = DB::table('categories')->where('categories.id', $id)->get();
+        $categories = DB::table('categories')->get();
+        // echo $categories;
+        return view("categories/create", compact("categories", 'categories'));
     }
 
     /**
@@ -27,7 +36,10 @@ class CategoriesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // $categories = Categories::find($id);
+        $categories = DB::table('categories')->where('categories.id', $id)->get();
+        echo $categories;
+        // return view("categories", compact("categories", 'categories'));
     }
 
     /**
